@@ -109,7 +109,8 @@ def read_ws(ws,client):
                 #send_all_json(packet)
             else:
                 break
-    return None
+    except Exception, e:
+        print "Exception occurred in read_ws. " + str(e)
 
 #Written by Abram Hindle, taken from https://github.com/abramhindle/WebSocketsExamples/blob/master/chat.py on March 15, 2017
 @sockets.route('/subscribe')
@@ -142,10 +143,17 @@ def flask_post_json():
     else:
         return json.loads(request.form.keys()[0])
 
+#Written by Ryan Satybrata under Apache license, taken from https://github.com/kobitoko/CMPUT404-assignment-ajax/blob/master/server.py on March 3, 2017, same as prev assignment
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
-    return None
+    if request.method=='PUT':
+        world_update=flask_post_json()
+        for key in world_update:
+            myWorld.update(entity, key, world_update[key])
+    elif request.method == 'POST':
+        myWorld.set(entity, flask_post_json())
+return json.dumps(myWorld.get(entity))
 
 @app.route("/world", methods=['POST','GET'])    
 def world():
