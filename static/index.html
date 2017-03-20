@@ -275,7 +275,8 @@ function wsSetup() {
             //Draw new images
             var drawStuff = JSON.parse(msg.data);
             for (var entity in drawStuff){
-                world[entity] = drawStuff[entity]
+                world[entity] = drawStuff[entity];
+                //drawNextFrame();
             }
             drawNextFrame();             
         } catch (e) {

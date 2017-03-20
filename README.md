@@ -57,3 +57,9 @@ Contributors
 
 * Mark Galloway
 * Abram Hindle
+* Connor Resler
+* Ryan Satybrata - referenced his code found here https://github.com/kobitoko/CMPUT404-assignment-websockets to help approach some problems, and used a few lines of code from there
+
+Penguin image taken from http://t11.deviantart.net/xJuJr_wwiJSTWpGXMTLNDWj57Ng=/300x200/filters:fixed_height(100,100):origin()/pre05/dd7b/th/pre/i/2015/197/c/7/king_pengu_by_mrblitzie-d91jcxz.png
+
+

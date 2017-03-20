@@ -83,7 +83,7 @@ class World:
 
 myWorld = World()        
 
-def set_listener( entity, data ):
+def set_listener(entity, data):
     ''' do something with the update ! '''
 
 myWorld.add_set_listener( set_listener )
@@ -99,14 +99,14 @@ def read_ws(ws,client):
     # XXX: TODO IMPLEMENT ME
     try:
         while True:
-            msg = ws.receieve()
+            msg = ws.receive()
             print "WS RECV: %s" % msg
             if (msg is not None):
                 packet = json.loads(msg)
                 #Add each entity from message to world
                 for entity in packet:
-                    myWorld.set(entity, packet[entity])    
-                #send_all_json(packet)
+                    myWorld.set(entity, packet[entity])   
+                send_all_json(json.loads(msg))
             else:
                 break
     except Exception, e:
@@ -117,10 +117,10 @@ def read_ws(ws,client):
 def subscribe_socket(ws):
     '''Fufill the websocket URL of /subscribe, every update notify the
        websocket and read updates from the websocket '''
-    # XXX: TODO IMPLEMENT ME
     client = Client()
     clients.append(client)
-    g = gevent.spawn( read_ws, ws, client )    
+    g = gevent.spawn( read_ws, ws, client )  
+ 
     try:
         while True:
             # block here
@@ -143,7 +143,7 @@ def flask_post_json():
     else:
         return json.loads(request.form.keys()[0])
 
-#Written by Ryan Satybrata under Apache license, taken from https://github.com/kobitoko/CMPUT404-assignment-ajax/blob/master/server.py on March 3, 2017, same as prev assignment
+#Written by Ryan Satybrata under Apache license, taken from https://github.com/kobitoko/CMPUT404-assignment-ajax/blob/master/server.py on March 3, 2017, same as assignment 4
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
@@ -152,8 +152,9 @@ def update(entity):
         for key in world_update:
             myWorld.update(entity, key, world_update[key])
     elif request.method == 'POST':
+        #  def update(self, entity, key, value):
         myWorld.set(entity, flask_post_json())
-return json.dumps(myWorld.get(entity))
+    return json.dumps(myWorld.get(entity))
 
 @app.route("/world", methods=['POST','GET'])    
 def world():
