@@ -53,8 +53,9 @@ function drawCircle(context,entity) {
         var x = entity["x"];
         var y = entity["y"];
         //moveTo(x,y);
+        //https://www.w3schools.com/tags/canvas_drawimage.asp
         var img = document.getElementById("picture");
-        drawImage(img,x-50,y-50);
+        drawImage(img,x,y);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
         //arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
