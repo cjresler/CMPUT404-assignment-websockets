@@ -25,6 +25,7 @@
   <body bgcolor="white" height="100%" width="100%"> 
     <div id="debug"></div>
     <canvas id="c" width="100%" height="100%" style="-webkit-tap-highlight-color: transparent;"></canvas> 
+    <img id="picture" src="/static/penguin.png" style="visibility:hidden; display:none;"></img>
 
     <script>
       // Fix me
@@ -52,10 +53,12 @@ function drawCircle(context,entity) {
         var x = entity["x"];
         var y = entity["y"];
         //moveTo(x,y);
+        var img = document.getElementById("picture");
+        drawImage(img,x-50,y-50);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
-        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
-        stroke();                                
+        //arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
+        //stroke();                                
     }
 }
 
@@ -125,6 +128,12 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just modified!
+    //Dictionary to send as JSON
+    var entities = {};
+    //Set dictionary value to specified data
+    entities[entity] = data;
+    var jsonEntities = JSON.stringify(entities);
+    socket.send(jsonEntities);
 }
 var counter = 0;
 function addEntityWithoutName(data) {
@@ -254,6 +263,7 @@ function wsSetup() {
     socket = new WebSocket(url);
     socket.onopen = function() {
         //XXX: TODO What are you going to do here?
+        //seems to work with nothing here?
     };
     socket.onerror = function(msg) {
         debug("WebSocket Error:" + msg.data);
@@ -261,7 +271,13 @@ function wsSetup() {
     socket.onmessage = function(msg) {  
         try {
             debug("WebSocket Recv:" + msg.data);
-            //XXX: TODO What are you going to do here?            
+            //XXX: TODO What are you going to do here?
+            //Draw new images
+            var drawStuff = JSON.parse(msg.data);
+            for (var entity in drawStuff){
+                world[entity] = drawStuff[entity]
+            }
+            drawNextFrame();             
         } catch (e) {
             alert("socket on message: " + e);
         }
